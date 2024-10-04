@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수비 위치 정하기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .player-entry {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .player-entry input {
+            margin-right: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            flex: 1;
+        }
+        .player-entry select {
+            margin-right: 5px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 80px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        @media (max-width: 600px) {
+            .player-entry {
+                flex-direction: column;
+            }
+            .player-entry input, .player-entry select {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>수비 위치 정하기</h2>
+        <div id="player-list"></div>
+        <button onclick="addPlayer()">추가</button>
+        <button onclick="generateLineups()">만들기</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let playerCount = 0;
+        const maxPlayers = 20;
+        const positions = ["P", "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "DH"];
+
+        function addPlayer() {
+            if (playerCount < maxPlayers) {
+                playerCount++;
+                const playerDiv = document.createElement("div");
+                playerDiv.className = "player-entry";
+                playerDiv.id = `player-${playerCount}`;
+
+                playerDiv.innerHTML = `
+                    <input type="text" placeholder="이름" id="name-${playerCount}">
+                    <select id="pos1-${playerCount}">
+                        <option value="">포지션1</option>
+                        <option value="P">투수</option>
+                        <option value="C">포수</option>
+                        <option value="1B">1루</option>
+                        <option value="2B">2루</option>
+                        <option value="3B">3루</option>
+                        <option value="SS">유격수</option>
+                        <option value="LF">좌익수</option>
+                        <option value="CF">중견수</option>
+                        <option value="RF">우익수</option>
+                        <option value="DH">지명타자</option>
+                    </select>
+                    <select id="pos2-${playerCount}">
+                        <option value="">포지션2</option>
+                        <option value="P">투수</option>
+                        <option value="C">포수</option>
+                        <option value="1B">1루</option>
+                        <option value="2B">2루</option>
+                        <option value="3B">3루</option>
+                        <option value="SS">유격수</option>
+                        <option value="LF">좌익수</option>
+                        <option value="CF">중견수</option>
+                        <option value="RF">우익수</option>
+                        <option value="DH">지명타자</option>
+                    </select>
+                    <select id="pos3-${playerCount}">
+                        <option value="">포지션3</option>
+                        <option value="P">투수</option>
+                        <option value="C">포수</option>
+                        <option value="1B">1루</option>
+                        <option value="2B">2루</option>
+                        <option value="3B">3루</option>
+                        <option value="SS">유격수</option>
+                        <option value="LF">좌익수</option>
+                        <option value="CF">중견수</option>
+                        <option value="RF">우익수</option>
+                        <option value="DH">지명타자</option>
+                    </select>
+                `;
+                document.getElementById("player-list").appendChild(playerDiv);
+            }
+        }
+
+        function generateLineups() {
+            const players = [];
+            const selectedPlayers = new Set();
+
+            for (let i = 1; i <= playerCount; i++) {
+                const name = document.getElementById(`name-${i}`).value.trim();
+                const pos1 = document.getElementById(`pos1-${i}`).value;
+                const pos2 = document.getElementById(`pos2-${i}`).value;
+                const pos3 = document.getElementById(`pos3-${i}`).value;
+
+                if (name) {
+                    players.push({ name, pos1, pos2, pos3 });
+                }
+            }
+
+            // 라인업 생성
+            const lineups = createLineups(players, selectedPlayers);
+            displayLineups(lineups, players);
+        }
+
+        function createLineups(players, selectedPlayers) {
+            const lineups = [];
+            const totalPositions = ["P", "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "DH"];
+            
+            for (let i = 0; i < 3; i++) {
+                const lineup = {};
+                const waitingPlayers = [];
+
+                // 포지션 1 우선 배치
+                players.forEach(player => {
+                    if (player[`pos${i + 1}`] && !selectedPlayers.has(player.name)) {
+                        if (!lineup[player[`pos${i + 1}`]]) {
+                            lineup[player[`pos${i + 1}`]] = player.name;
+                            selectedPlayers.add(player.name);
+                        }
+                    }
+                });
+
+                // 포지션 2 배치
+                players.forEach(player => {
+                    if (player[`pos${i + 1}`] && !selectedPlayers.has(player.name)) {
+                        if (!lineup[player[`pos${i + 1}`]]) {
+                            lineup[player[`pos${i + 1}`]] = player.name;
+                            selectedPlayers.add(player.name);
+                        }
+                    }
+                });
+
+                // 포지션 3 배치
+                players.forEach(player => {
+                    if (player[`pos${i + 1}`] && !selectedPlayers.has(player.name)) {
+                        if (!lineup[player[`pos${i + 1}`]]) {
+                            lineup[player[`pos${i + 1}`]] = player.name;
+                            selectedPlayers.add(player.name);
+                        }
+                    }
+                });
+
+                // 빈자리 처리: 수비에 배치되지 않은 선수들 추가
+                totalPositions.forEach(pos => {
+                    if (!lineup[pos]) {
+                        waitingPlayers.push(pos);
+                    }
+                });
+
+                // 남은 자리에 아무 선수 추가
+                while (waitingPlayers.length > 0) {
+                    const randomPlayer = players.find(p => !selectedPlayers.has(p.name));
+                    if (randomPlayer) {
+                        lineup[waitingPlayers.pop()] = randomPlayer.name;
+                        selectedPlayers.add(randomPlayer.name);
+                    }
+                }
+
+                lineups.push(lineup);
+            }
+
+            return lineups;
+        }
+
+        function displayLineups(lineups, players) {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "";
+
+            lineups.forEach((lineup) => {
+                const table = document.createElement("table");
+
+                const headerRow = document.createElement("tr");
+                positions.forEach(pos => {
+                    const th = document.createElement("th");
+                    th.textContent = pos;
+                    headerRow.appendChild(th);
+                });
+                table.appendChild(headerRow);
+
+                const row = document.createElement("tr");
+                positions.forEach(pos => {
+                    row.appendChild(createCell(lineup[pos]));
+                });
+                table.appendChild(row);
+                resultDiv.appendChild(table);
+            });
+
+            // 대기 선수 표시
+            const waitingPlayers = players.filter(player => !selectedPlayers.has(player.name));
+            const waitingTable = document.createElement("table");
+            const waitingHeaderRow = document.createElement("tr");
+            const waitingTh = document.createElement("th");
+            waitingTh.textContent = "대기 선수";
+            waitingHeaderRow.appendChild(waitingTh);
+            waitingTable.appendChild(waitingHeaderRow);
+
+            const waitingRow = document.createElement("tr");
+            const waitingTd = document.createElement("td");
+            waitingTd.textContent = waitingPlayers.map(p => p.name).join(", ") || "없음";
+            waitingRow.appendChild(waitingTd);
+            waitingTable.appendChild(waitingRow);
+
+            resultDiv.appendChild(waitingTable);
+        }
+
+        function createCell(name) {
+            const td = document.createElement("td");
+            td.textContent = name || "대기";
+            return td;
+        }
+    </script>
+</body>
+</html>
