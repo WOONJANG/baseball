@@ -102,7 +102,7 @@
 
 <div id="results"></div>
     
-<a href="https://github.com/WOONJANG"><footer>© 2024. 장운 All rights reserved.</footer></a>
+<a id="link" href="https://github.com/WOONJANG" onclick="return false;"><footer style="color: black;">© 2024. 장운 All rights reserved.</footer></a>
 
 <script>
     let playerCount = 0;
@@ -326,6 +326,21 @@ function generateTable(players) {
 
     // 페이지 로드 시 쿠키에서 이름 불러오기
     loadNamesFromCookies();
+
+        let clickCount = 0;
+        const linkElement = document.getElementById('link');
+
+        linkElement.addEventListener('click', function(event) {
+            clickCount++;
+            if (clickCount === 10) {
+                // Change background color randomly
+                document.body.style.backgroundColor = getRandomColor();
+            } else if (clickCount === 14) {
+                // Activate link and navigate to the URL
+                linkElement.setAttribute('href', 'https://github.com/WOONJANG');
+                linkElement.removeAttribute('onclick');
+            }
+        });
 </script>
 </body>
 </html>
