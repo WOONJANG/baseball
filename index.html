@@ -7,277 +7,320 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            width: 90%;
-            max-width: 600px;
-            margin: 20px auto;
             padding: 20px;
-            background-color: white;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            background-color: #f0f0f0;
         }
-        h2 {
+        h1 {
             text-align: center;
+        }
+        .input-section {
             margin-bottom: 20px;
         }
-        .player-entry {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
+        .input-section input {
+            padding: 5px;
+            width: 80%;
         }
-        .player-entry input {
-            margin-right: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            flex: 1;
-        }
-        .player-entry select {
-            margin-right: 5px;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            width: 80px;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
+        .input-section button {
+            padding: 5px;
+            background-color: green;
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
             cursor: pointer;
-            margin-top: 10px;
         }
-        button:hover {
-            background-color: #45a049;
+        .player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
-        #result {
-            margin-top: 20px;
+        .player input, .player select {
+            padding: 5px;
+            margin-right: 5px;
+        }
+        .player input {
+            width: 20%;
+        }
+        .player select {
+            width: 15%;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .remove-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-bottom: 10px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
         th, td {
-            border: 1px solid #000;
-            padding: 8px;
+            padding: 10px;
+            border: 1px solid #ddd;
             text-align: center;
-            font-size: 14px;
         }
-        th {
-            background-color: #f2f2f2;
+        .result {
+            margin-top: 20px;
         }
-        @media (max-width: 600px) {
-            .player-entry {
-                flex-direction: column;
-            }
-            .player-entry input, .player-entry select {
-                width: 100%;
-                margin-right: 0;
+        @media (min-width: 600px) {
+            body {
+                max-width: 600px;
+                margin: 0 auto;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>수비 위치 정하기</h2>
-        <div id="player-list"></div>
-        <button onclick="addPlayer()">추가</button>
-        <button onclick="generateLineups()">만들기</button>
-        <div id="result"></div>
-    </div>
 
-    <script>
-        let playerCount = 0;
-        const maxPlayers = 20;
-        const positions = ["P", "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "DH"];
+<h1>수비 위치 정하기</h1>
 
-        function addPlayer() {
-            if (playerCount < maxPlayers) {
-                playerCount++;
-                const playerDiv = document.createElement("div");
-                playerDiv.className = "player-entry";
-                playerDiv.id = `player-${playerCount}`;
+<div class="input-section">
+    <input type="text" id="name-input" placeholder="이름을 입력하세요. 쉼표(,)로 구분">
+    <button id="save-names" style="width:100px;">저장</button>
+</div>
 
-                playerDiv.innerHTML = `
-                    <input type="text" placeholder="이름" id="name-${playerCount}">
-                    <select id="pos1-${playerCount}">
-                        <option value="">포지션1</option>
-                        <option value="P">투수</option>
-                        <option value="C">포수</option>
-                        <option value="1B">1루</option>
-                        <option value="2B">2루</option>
-                        <option value="3B">3루</option>
-                        <option value="SS">유격수</option>
-                        <option value="LF">좌익수</option>
-                        <option value="CF">중견수</option>
-                        <option value="RF">우익수</option>
-                        <option value="DH">지명타자</option>
-                    </select>
-                    <select id="pos2-${playerCount}">
-                        <option value="">포지션2</option>
-                        <option value="P">투수</option>
-                        <option value="C">포수</option>
-                        <option value="1B">1루</option>
-                        <option value="2B">2루</option>
-                        <option value="3B">3루</option>
-                        <option value="SS">유격수</option>
-                        <option value="LF">좌익수</option>
-                        <option value="CF">중견수</option>
-                        <option value="RF">우익수</option>
-                        <option value="DH">지명타자</option>
-                    </select>
-                    <select id="pos3-${playerCount}">
-                        <option value="">포지션3</option>
-                        <option value="P">투수</option>
-                        <option value="C">포수</option>
-                        <option value="1B">1루</option>
-                        <option value="2B">2루</option>
-                        <option value="3B">3루</option>
-                        <option value="SS">유격수</option>
-                        <option value="LF">좌익수</option>
-                        <option value="CF">중견수</option>
-                        <option value="RF">우익수</option>
-                        <option value="DH">지명타자</option>
-                    </select>
-                `;
-                document.getElementById("player-list").appendChild(playerDiv);
+<div id="player-container"></div>
+
+<button id="remove-player" style="display:none;"> - </button>
+<button id="add-player">+</button>
+
+<button id="create-lineup" style="display:none;">V</button>
+
+<div id="results"></div>
+
+<script>
+    let playerCount = 0;
+    const positions = ["투수", "포수", "1루수", "2루수", "3루수", "유격수", "좌익수", "중견수", "우익수", "지명타자"];
+    let savedNames = [];
+
+    // 이름을 저장하는 함수
+    function saveNames() {
+        const input = document.getElementById("name-input").value;
+        if (input.trim() === '') return;
+
+        savedNames = input.split(',').map(name => name.trim());
+
+        // 쿠키에 저장
+        document.cookie = `savedNames=${savedNames.join(',')}; path=/`;
+        alert("이름이 저장되었습니다.");
+    }
+
+    // 쿠키에서 이름 불러오기
+    function loadNamesFromCookies() {
+        const cookieValue = document.cookie.split('; ').find(row => row.startsWith('savedNames='));
+        if (cookieValue) {
+            savedNames = cookieValue.split('=')[1].split(',');
+        }
+    }
+
+    function addPlayer() {
+        if (playerCount >= 20) return;
+
+        const container = document.createElement("div");
+        container.classList.add("player");
+
+        container.innerHTML = `
+            <select class="name">${generateNameOptions()}</select>
+            <select class="pref1">${generateOptions()}</select>
+            <select class="pref2">${generateOptions()}</select>
+            <select class="pref3">${generateOptions()}</select>
+        `;
+
+        document.getElementById("player-container").appendChild(container);
+        playerCount++;
+
+        updateRemoveButtonVisibility();
+
+        if (playerCount >= 9) {
+            document.getElementById("create-lineup").style.display = 'block';
+            document.getElementById("create-lineup").style.backgroundColor = 'green';
+        }
+    }
+
+    // 드롭다운에 저장된 이름들 표시
+    function generateNameOptions() {
+        return savedNames.map(name => `<option value="${name}">${name}</option>`).join('');
+    }
+
+    function generateOptions() {
+        return positions.map(pos => `<option value="${pos}">${pos}</option>`).join('');
+    }
+
+    function createLineup() {
+        const players = Array.from(document.querySelectorAll(".player")).map(player => ({
+            name: player.querySelector(".name").value,
+            pref1: player.querySelector(".pref1").value,
+            pref2: player.querySelector(".pref2").value,
+            pref3: player.querySelector(".pref3").value
+        }));
+
+        const resultsContainer = document.getElementById("results");
+        resultsContainer.innerHTML = ''; // 결과를 새로 초기화
+
+        // 각 안에 대한 결과 생성
+        const result = document.createElement("div");
+        result.classList.add("result");
+        result.innerHTML = `<h2>라인업</h2>${generateTable(players)}`;
+        resultsContainer.appendChild(result);
+    }
+
+function generateTable(players) {
+    const positionAssignments = {
+        "투수": [],
+        "포수": [],
+        "1루수": [],
+        "2루수": [],
+        "3루수": [],
+        "유격수": [],
+        "좌익수": [],
+        "중견수": [],
+        "우익수": [],
+        "지명타자": [],
+        "대기인원": []
+    };
+
+    const assignedPlayers = new Set(); // 이미 배정된 선수들
+    const addedPlayers = new Set(); // 중복되지 않도록 체크하는 Set
+
+    // 1지망 배치
+    const firstPrefs = {};
+    players.forEach(player => {
+        const pref1 = player.pref1;
+        if (!firstPrefs[pref1]) firstPrefs[pref1] = [];
+        firstPrefs[pref1].push(player);
+    });
+
+    for (const [pos, playersWithSamePref] of Object.entries(firstPrefs)) {
+        if (playersWithSamePref.length > 0 && positionAssignments[pos].length === 0) {
+            const randomIndex = Math.floor(Math.random() * playersWithSamePref.length);
+            positionAssignments[pos].push(playersWithSamePref[randomIndex]);
+            assignedPlayers.add(playersWithSamePref[randomIndex].name);
+        }
+    }
+
+    // 2지망 배치
+    players.forEach(player => {
+        if (!assignedPlayers.has(player.name)) {
+            const pref2 = player.pref2;
+            if (positionAssignments[pref2].length === 0) {
+                positionAssignments[pref2].push(player);
+                assignedPlayers.add(player.name);
             }
         }
+    });
 
-        function generateLineups() {
-            const players = [];
-            const selectedPlayers = new Set();
-
-            for (let i = 1; i <= playerCount; i++) {
-                const name = document.getElementById(`name-${i}`).value.trim();
-                const pos1 = document.getElementById(`pos1-${i}`).value;
-                const pos2 = document.getElementById(`pos2-${i}`).value;
-                const pos3 = document.getElementById(`pos3-${i}`).value;
-
-                if (name) {
-                    players.push({ name, pos1, pos2, pos3 });
-                }
+    // 3지망 배치
+    players.forEach(player => {
+        if (!assignedPlayers.has(player.name)) {
+            const pref3 = player.pref3;
+            if (positionAssignments[pref3].length === 0) {
+                positionAssignments[pref3].push(player);
+                assignedPlayers.add(player.name);
             }
-
-            // 라인업 생성
-            const lineups = createLineups(players, selectedPlayers);
-            displayLineups(lineups, players);
         }
+    });
 
-        function createLineups(players, selectedPlayers) {
-            const lineups = [];
-            const totalPositions = ["P", "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "DH"];
-            
-            for (let i = 0; i < 3; i++) {
-                const lineup = {};
-                const waitingPlayers = [];
+    // 대기인원 처리
+    players.forEach(player => {
+        if (!assignedPlayers.has(player.name)) {
+            positionAssignments["대기인원"].push(player);
+        }
+    });
 
-                // 포지션 1 우선 배치
-                players.forEach(player => {
-                    if (player[`pos${i + 1}`] && !selectedPlayers.has(player.name)) {
-                        if (!lineup[player[`pos${i + 1}`]]) {
-                            lineup[player[`pos${i + 1}`]] = player.name;
-                            selectedPlayers.add(player.name);
-                        }
-                    }
-                });
+    // 지명타자 랜덤 배치
+    const availableForDH = players.filter(p => !assignedPlayers.has(p.name) && p.pref1 === "지명타자");
+    if (availableForDH.length === 0 && assignedPlayers.size > 0) {
+        const firstDH = positionAssignments["대기인원"][0] || positionAssignments["투수"][0];
+        if (firstDH) {
+            positionAssignments["지명타자"].push(firstDH);
+            assignedPlayers.add(firstDH.name);
+        }
+    } else if (availableForDH.length > 0) {
+        const randomIndex = Math.floor(Math.random() * availableForDH.length);
+        positionAssignments["지명타자"].push(availableForDH[randomIndex]);
+        assignedPlayers.add(positionAssignments["지명타자"][0].name);
+    }
 
-                // 포지션 2 배치
-                players.forEach(player => {
-                    if (player[`pos${i + 1}`] && !selectedPlayers.has(player.name)) {
-                        if (!lineup[player[`pos${i + 1}`]]) {
-                            lineup[player[`pos${i + 1}`]] = player.name;
-                            selectedPlayers.add(player.name);
-                        }
-                    }
-                });
+    // 지명타자에 여러 명이 있는 경우 처리
+    if (positionAssignments["지명타자"].length > 1) {
+        const firstDH = positionAssignments["지명타자"].shift(); // 첫 번째 선수만 남김
+        const remainingDH = positionAssignments["지명타자"].map(p => p.name).join(', ');
+        positionAssignments["대기인원"].push({ name: remainingDH });
+        positionAssignments["지명타자"] = [firstDH];
+    }
 
-                // 포지션 3 배치
-                players.forEach(player => {
-                    if (player[`pos${i + 1}`] && !selectedPlayers.has(player.name)) {
-                        if (!lineup[player[`pos${i + 1}`]]) {
-                            lineup[player[`pos${i + 1}`]] = player.name;
-                            selectedPlayers.add(player.name);
-                        }
-                    }
-                });
-
-                // 빈자리 처리: 수비에 배치되지 않은 선수들 추가
-                totalPositions.forEach(pos => {
-                    if (!lineup[pos]) {
-                        waitingPlayers.push(pos);
-                    }
-                });
-
-                // 남은 자리에 아무 선수 추가
-                while (waitingPlayers.length > 0) {
-                    const randomPlayer = players.find(p => !selectedPlayers.has(p.name));
-                    if (randomPlayer) {
-                        lineup[waitingPlayers.pop()] = randomPlayer.name;
-                        selectedPlayers.add(randomPlayer.name);
-                    }
-                }
-
-                lineups.push(lineup);
+    // 중복된 이름 제거
+    for (const [pos, players] of Object.entries(positionAssignments)) {
+        positionAssignments[pos] = players.filter(player => {
+            if (!addedPlayers.has(player.name)) {
+                addedPlayers.add(player.name); // 이름이 이미 있는지 확인하고 없으면 추가
+                return true;
             }
+            return false;
+        });
+    }
 
-            return lineups;
+    // 중복된 이름을 대기인원에서 제거
+    const uniqueWaitingPlayers = new Set();
+    positionAssignments["대기인원"] = positionAssignments["대기인원"].filter(player => {
+        if (!uniqueWaitingPlayers.has(player.name)) {
+            uniqueWaitingPlayers.add(player.name); // 중복된 이름은 추가하지 않음
+            return true;
         }
+        return false;
+    });
 
-        function displayLineups(lineups, players) {
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = "";
+    // 테이블 생성
+    let table = `
+        <table>
+            <tr>
+                <th>포지션</th>
+                <th>선수</th>
+            </tr>
+            ${Object.entries(positionAssignments).map(([pos, players]) => `
+                <tr>
+                    <td>${pos}</td>
+                    <td>${pos === "지명타자" ? 
+                        (players.length > 0 ? players[0].name : '') : 
+                        (players.length > 0 ? players.map(p => p.name).join(', ') : '')}</td>
+                </tr>
+            `).join('')}
+        </table>
+    `;
 
-            lineups.forEach((lineup) => {
-                const table = document.createElement("table");
+    return table;
+}
 
-                const headerRow = document.createElement("tr");
-                positions.forEach(pos => {
-                    const th = document.createElement("th");
-                    th.textContent = pos;
-                    headerRow.appendChild(th);
-                });
-                table.appendChild(headerRow);
+    function updateRemoveButtonVisibility() {
+        const removeButton = document.getElementById("remove-player");
+        removeButton.style.display = playerCount > 1 ? 'block' : 'none';
+    }
 
-                const row = document.createElement("tr");
-                positions.forEach(pos => {
-                    row.appendChild(createCell(lineup[pos]));
-                });
-                table.appendChild(row);
-                resultDiv.appendChild(table);
-            });
-
-            // 대기 선수 표시
-            const waitingPlayers = players.filter(player => !selectedPlayers.has(player.name));
-            const waitingTable = document.createElement("table");
-            const waitingHeaderRow = document.createElement("tr");
-            const waitingTh = document.createElement("th");
-            waitingTh.textContent = "대기 선수";
-            waitingHeaderRow.appendChild(waitingTh);
-            waitingTable.appendChild(waitingHeaderRow);
-
-            const waitingRow = document.createElement("tr");
-            const waitingTd = document.createElement("td");
-            waitingTd.textContent = waitingPlayers.map(p => p.name).join(", ") || "없음";
-            waitingRow.appendChild(waitingTd);
-            waitingTable.appendChild(waitingRow);
-
-            resultDiv.appendChild(waitingTable);
+    document.getElementById("save-names").addEventListener("click", saveNames);
+    document.getElementById("add-player").addEventListener("click", addPlayer);
+    document.getElementById("create-lineup").addEventListener("click", createLineup);
+    document.getElementById("remove-player").addEventListener("click", function() {
+        const playerContainers = document.querySelectorAll(".player");
+        if (playerContainers.length > 0) {
+            playerContainers[playerContainers.length - 1].remove();
+            playerCount--;
+            updateRemoveButtonVisibility();
         }
+    });
 
-        function createCell(name) {
-            const td = document.createElement("td");
-            td.textContent = name || "대기";
-            return td;
-        }
-    </script>
+    // 페이지 로드 시 쿠키에서 이름 불러오기
+    loadNamesFromCookies();
+</script>
 </body>
 </html>
