@@ -292,3 +292,8 @@ function NotReload(){
     } 
 }
 document.onkeydown = NotReload;
+
+window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    e.returnValue = ''; // 이 값은 크롬에서는 무시되지만, 경고 메시지를 표시합니다.
+});
