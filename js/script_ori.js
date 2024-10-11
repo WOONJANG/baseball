@@ -43,6 +43,8 @@ let playerCount = 0;
         if (playerCount >= 9) {
             document.getElementById("create-lineup").style.display = 'block';
             document.getElementById("create-lineup").style.backgroundColor = 'green';
+        } else {
+            document.getElementById("create-lineup").style.display = 'none';
         }
     }
 
@@ -69,7 +71,7 @@ let playerCount = 0;
         // 각 안에 대한 결과 생성
         const result = document.createElement("div");
         result.classList.add("result");
-        result.innerHTML = `<h2>라인업</h2>${generateTable(players)}`;
+        result.innerHTML = `<h2>LineUp</h2>${generateTable(players)}`;
         resultsContainer.appendChild(result);
     }
 
@@ -216,10 +218,22 @@ function generateTable(players) {
             playerCount--;
             updateRemoveButtonVisibility();
         }
+        if (playerCount <= 8) {
+            document.getElementById("create-lineup").style.display = 'none';
+        }
     });
 
     // 페이지 로드 시 쿠키에서 이름 불러오기
     loadNamesFromCookies();
+
+function getRandomColor() {
+	const letters = '0123456789ABCDEF';
+    	let color = '#';
+    	for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+	}
+   		 return color;
+}
 
         let clickCount = 0;
         const linkElement = document.getElementById('link');
