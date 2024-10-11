@@ -271,7 +271,7 @@ document.addEventListener('click', function(event) {
     }
 });
 
-//선수 쿠키 초기화
+// 선수 쿠키 초기화
 document.getElementById('clear-cookies').addEventListener('click', function() {
     const confirmation = confirm("정말로 입력한 선수를 초기화하시겠습니까?");
     if (confirmation) {
@@ -282,3 +282,13 @@ document.getElementById('clear-cookies').addEventListener('click', function() {
 	location.reload();
     }
 });
+
+// 새로고침 방지 코드
+function NotReload(){
+    if( (event.ctrlKey == true && (event.keyCode == 78 || event.keyCode == 82)) || (event.keyCode == 116) ) {
+        event.keyCode = 0;
+        event.cancelBubble = true;
+        event.returnValue = false;
+    } 
+}
+document.onkeydown = NotReload;
