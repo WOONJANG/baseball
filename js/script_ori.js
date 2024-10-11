@@ -3,16 +3,16 @@ let playerCount = 0;
     let savedNames = [];
 
     // 이름을 저장하는 함수
-function saveNames() {
-    const input = document.getElementById("name-input").value;
-    if (input.trim() === '') return;
+    function saveNames() {
+        const input = document.getElementById("name-input").value;
+        if (input.trim() === '') return;
 
-    savedNames = input.split(',').map(name => name.trim());
-    document.cookie = `savedNames=${savedNames.join(',')}; path=/`;
-    alert("선수가 저장되었습니다.");
-    
-    updateAddPlayerButton(); // 버튼 상태 업데이트
-}
+        savedNames = input.split(',').map(name => name.trim());
+
+        // 쿠키에 저장
+        document.cookie = `savedNames=${savedNames.join(',')}; path=/`;
+        alert("이름이 저장되었습니다.");
+    }
 
     // 쿠키에서 이름 불러오기
     function loadNamesFromCookies() {
@@ -291,21 +291,9 @@ function NotReload(){
         event.returnValue = false;
     } 
 }
+document.onkeydown = NotReload;
 
 window.addEventListener('beforeunload', function (e) {
     e.preventDefault();
     e.returnValue = ''; // 이 값은 크롬에서는 무시되지만, 경고 메시지를 표시합니다.
 });
-document.onkeydown = NotReload;
-
-function updateAddPlayerButton() {
-    const cookieValue = document.cookie.split('; ').find(row => row.startsWith('savedNames='));
-    const nameCount = cookieValue ? cookieValue.split('=')[1].split(',').length : 0;
-
-    const addPlayerButton = document.getElementById('add-player');
-    addPlayerButton.disabled = nameCount < 2; // 이름이 2개 이상일 때만 활성화
-}
-
-// 페이지 로드 시 쿠키에서 이름 불러오기
-loadNamesFromCookies();
-updateAddPlayerButton(); // 버튼 상태 업데이트
