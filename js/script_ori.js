@@ -249,3 +249,25 @@ function getRandomColor() {
                 linkElement.removeAttribute('onclick');
             }
         });
+
+// 사용방법 카드 함수
+document.getElementById('toggle-help').addEventListener('click', function(event) {
+    event.stopPropagation(); // 이벤트 버블링 방지
+    const helpCard = document.getElementById('help-card');
+    if (helpCard.classList.contains('show')) {
+        helpCard.classList.remove('show');
+    } else {
+        helpCard.classList.add('show');
+    }
+});
+
+// 화면의 다른 곳 클릭 시 카드 닫기
+document.addEventListener('click', function(event) {
+    const helpCard = document.getElementById('help-card');
+    const toggleButton = document.getElementById('toggle-help');
+    
+    if (!helpCard.contains(event.target) && event.target !== toggleButton) {
+        helpCard.classList.remove('show');
+    }
+});
+
