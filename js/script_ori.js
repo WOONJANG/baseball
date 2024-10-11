@@ -271,3 +271,14 @@ document.addEventListener('click', function(event) {
     }
 });
 
+//선수 쿠키 초기화
+document.getElementById('clear-cookies').addEventListener('click', function() {
+    const confirmation = confirm("정말로 입력한 선수를 초기화하시겠습니까?");
+    if (confirmation) {
+        // 쿠키 삭제
+        document.cookie = "savedNames=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+        alert("초기화되었습니다.");
+        savedNames = []; // 배열 초기화
+	location.reload();
+    }
+});
