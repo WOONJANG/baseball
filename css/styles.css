@@ -98,6 +98,33 @@ body {
 	#label-container span:nth-child(4) {
     		width: 100px; /* 지망 셀렉트 박스와 동일한 넓이 */
 	}
+#help-card {
+    position: fixed;
+    top: 20px; /* 페이지 맨 위에서 20px 아래로 위치 */
+    right: 20px; /* 페이지 오른쪽에서 20px 왼쪽으로 위치 */
+    width: 300px; /* 카드의 너비 */
+    padding: 20px; /* 카드 내부 여백 */
+    background-color: white; /* 배경색 */
+    border: 1px solid #ccc; /* 테두리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 */
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* 애니메이션 효과 */
+    transform: translateY(-100%); /* 화면 위로 이동하여 보이지 않음 */
+    opacity: 0; /* 투명도 */
+    visibility: hidden; /* 가시성 숨김 */
+    z-index: 999; /* 다른 요소보다 위에 나타나도록 설정 */
+}
+
+#help-card.show {
+    transform: translateY(0); /* 위치 초기화하여 화면에 표시 */
+    opacity: 1; /* 투명도 설정 */
+    visibility: visible; /* 가시성 설정 */
+}
+
+
+.hidden {
+    display: none;
+}
+
 
         @media (min-width: 600px) {
     		body {
