@@ -9,6 +9,19 @@
 <body>
 
 <h1>Auto LineUp</h1>
+<button id="toggle-help">사용 방법</button>
+<div id="help-card" class="hidden">
+    <h3>사용 방법</h3>
+    <p>
+1. 이름을 입력하세요. ,(쉼표)로 구분됩니다. ex) 홍길동,이순신,유관순,장보고<br>
+2. 이름 옆 버튼을 눌러주세요.(저장)
+3. +(추가) 버튼을 눌러 인원을 늘려주세요.
+4. 배치할 선수들의 이름을 선택해주시고, 1지망 포지션부터 3지망 까지 선택해주세요.
+5. 9명 이상일 경우, 만들기 버튼이 생성됩니다.
+<유의사항>
+1. 이미 선수를 적고 저장을 누른 후 추가 했을 때, 선수를 추가하고 싶은 경우 새로 추가버튼을 눌러야 적용됩니다. (전에 추가된 줄에선 추가 선수이름이 나오지 않음).
+    </p>
+</div>
 
 <div class="input-section">
     <input type="text" id="name-input" placeholder="이름을 입력하세요. 쉼표(,)로 구분">
@@ -34,6 +47,6 @@
 <div id="results"></div>
     
 <a id="link" href="https://github.com/WOONJANG" onclick="return false;"><footer style="color: black;">© 2024. 장운 All rights reserved.</footer></a>
-<script src="js/script.js"></script>
+<script src="js/script_ori.js"></script>
 </body>
 </html>
