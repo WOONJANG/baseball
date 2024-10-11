@@ -23,6 +23,19 @@ let playerCount = 0;
     }
 
     function addPlayer() {
+
+// 쿠키에서 불러온 이름 목록이 비어 있는지 확인
+    if (savedNames.length === 0) {
+        alert("저장된 선수 이름이 없습니다. 이름을 먼저 저장해주세요."); // 쿠키가 비어 있을 때 경고 메시지
+        return; // 함수 종료
+    }
+
+    // 선수 이름이 비어있는지 확인
+    const nameInput = document.getElementById("name-input").value;
+    if (nameInput.trim() === '') {
+        alert("선수 이름을 입력해주세요."); // 이름이 없을 때 경고 메시지
+        return; // 함수 종료
+    }
         if (playerCount >= 20) return;
 
         const container = document.createElement("div");
