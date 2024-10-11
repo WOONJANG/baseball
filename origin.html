@@ -13,6 +13,9 @@
         h1 {
             text-align: center;
         }
+        h2 {
+            text-align: center;
+        }
         .input-section {
             margin-bottom: 20px;
         }
@@ -37,12 +40,13 @@
             padding: 5px;
             margin-right: 5px;
         }
-        .player input {
-            width: 20%;
-        }
-        .player select {
-            width: 15%;
-        }
+
+	.pref1, .pref2, .pref3 {
+	    width: 100px;
+	}
+	.name {
+	    width: 250px;
+	}
         button {
             padding: 10px;
             background-color: #007bff;
@@ -50,6 +54,7 @@
             border: none;
             width: 100%;
             margin-bottom: 10px;
+	    border-radius: 20px;
         }
         .remove-btn {
             background-color: red;
@@ -75,37 +80,83 @@
         }
 	footer{
 		margin-bottom: 10px;
+		margin: 0 auto;
 	}
 	a {
-    		text-decoration: none; /* 마우스를 올렸을 때 밑줄이 사라짐 */
+    		text-decoration: none;
 	}
+	button:hover, .remove-btn:hover {
+    		background-color: darkgreen; /* or a different contrasting color */
+	}
+	#label-container div {
+    		display: flex;
+    		justify-content: space-between;
+    		margin-bottom: 10px;
+	}
+
+	#label-container span {
+    		width: 250px; /* 이름 칸과 동일한 넓이 */
+    		text-align: center;
+		font-weight: bold;
+	}
+		
+	#label-container span:nth-child(2),
+	#label-container span:nth-child(3),
+	#label-container span:nth-child(4) {
+    		width: 100px; /* 지망 셀렉트 박스와 동일한 넓이 */
+	}
+
         @media (min-width: 600px) {
-            body {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-        }
+    		body {
+        		max-width: 600px;
+        		margin: 0 auto;
+        		padding: 10px; /* 추가 */
+    		}
+	}
+
     </style>
 </head>
 <body>
 
-<h1>수비 위치 정하기</h1>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUTO LINEUP</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<h1>Auto LineUp</h1>
 
 <div class="input-section">
     <input type="text" id="name-input" placeholder="이름을 입력하세요. 쉼표(,)로 구분">
-    <button id="save-names" style="width:100px;">저장</button>
+    <button id="save-names" style="width:98px;">📝</button>
 </div>
 
+<div id="label-container">
+    <div>
+        <span>이름</span>
+        <span>1지망</span>
+        <span>2지망</span>
+        <span>3지망</span>
+    </div>
+</div>
 <div id="player-container"></div>
 
-<button id="remove-player" style="display:none;"> - </button>
-<button id="add-player">+</button>
 
-<button id="create-lineup" style="display:none;">V</button>
+<button id="remove-player" style="display:none;"> ⧿ </button>
+<button id="add-player">⧾</button>
+
+<button id="create-lineup" style="display:none;">✔</button>
 
 <div id="results"></div>
     
 <a id="link" href="https://github.com/WOONJANG" onclick="return false;"><footer style="color: black;">© 2024. 장운 All rights reserved.</footer></a>
+<script src="js/script_ori.js"></script>
+</body>
+</html>
 
 <script>
     let playerCount = 0;
@@ -153,6 +204,8 @@
         if (playerCount >= 9) {
             document.getElementById("create-lineup").style.display = 'block';
             document.getElementById("create-lineup").style.backgroundColor = 'green';
+        } else {
+            document.getElementById("create-lineup").style.display = 'none';
         }
     }
 
@@ -179,7 +232,7 @@
         // 각 안에 대한 결과 생성
         const result = document.createElement("div");
         result.classList.add("result");
-        result.innerHTML = `<h2>라인업</h2>${generateTable(players)}`;
+        result.innerHTML = `<h2>LineUp</h2>${generateTable(players)}`;
         resultsContainer.appendChild(result);
     }
 
@@ -312,6 +365,7 @@ function generateTable(players) {
 
     function updateRemoveButtonVisibility() {
         const removeButton = document.getElementById("remove-player");
+	removeButton.style.backgroundColor = 'red';
         removeButton.style.display = playerCount > 1 ? 'block' : 'none';
     }
 
@@ -325,10 +379,22 @@ function generateTable(players) {
             playerCount--;
             updateRemoveButtonVisibility();
         }
+        if (playerCount <= 8) {
+            document.getElementById("create-lineup").style.display = 'none';
+        }
     });
 
     // 페이지 로드 시 쿠키에서 이름 불러오기
     loadNamesFromCookies();
+
+function getRandomColor() {
+	const letters = '0123456789ABCDEF';
+    	let color = '#';
+    	for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+	}
+   		 return color;
+}
 
         let clickCount = 0;
         const linkElement = document.getElementById('link');
