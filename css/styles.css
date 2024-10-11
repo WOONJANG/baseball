@@ -100,9 +100,9 @@ body {
 	}
 #help-card {
     position: fixed;
-    top: 20px; /* 페이지 맨 위에서 20px 아래로 위치 */
-    right: 20px; /* 페이지 오른쪽에서 20px 왼쪽으로 위치 */
-    width: 500px; /* 카드의 너비 */
+    top: 110px; /* 페이지 맨 위에서 20px 아래로 위치 */
+    left: 5%; /* 페이지 왼쪽에서 5% 오른쪽으로 위치 */
+    width: 200px; /* 카드의 너비 */
     padding: 20px; /* 카드 내부 여백 */
     background-color: white; /* 배경색 */
     border: 1px solid #ccc; /* 테두리 */
