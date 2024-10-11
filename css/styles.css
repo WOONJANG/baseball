@@ -6,6 +6,9 @@ body {
         h1 {
             text-align: center;
         }
+        h2 {
+            text-align: center;
+        }
         .input-section {
             margin-bottom: 20px;
         }
@@ -30,12 +33,13 @@ body {
             padding: 5px;
             margin-right: 5px;
         }
-        .player input {
-            width: 20%;
-        }
-        .player select {
-            width: 15%;
-        }
+
+	.pref1, .pref2, .pref3 {
+	    width: 100px;
+	}
+	.name {
+	    width: 250px;
+	}
         button {
             padding: 10px;
             background-color: #007bff;
@@ -43,6 +47,7 @@ body {
             border: none;
             width: 100%;
             margin-bottom: 10px;
+	    border-radius: 20px;
         }
         .remove-btn {
             background-color: red;
@@ -68,13 +73,36 @@ body {
         }
 	footer{
 		margin-bottom: 10px;
+		margin: 0 auto;
 	}
 	a {
-    		text-decoration: none; /* 마우스를 올렸을 때 밑줄이 사라짐 */
+    		text-decoration: none;
 	}
+	button:hover, .remove-btn:hover {
+    		background-color: darkgreen; /* or a different contrasting color */
+	}
+	#label-container div {
+    		display: flex;
+    		justify-content: space-between;
+    		margin-bottom: 10px;
+	}
+
+	#label-container span {
+    		width: 250px; /* 이름 칸과 동일한 넓이 */
+    		text-align: center;
+		font-weight: bold;
+	}
+		
+	#label-container span:nth-child(2),
+	#label-container span:nth-child(3),
+	#label-container span:nth-child(4) {
+    		width: 100px; /* 지망 셀렉트 박스와 동일한 넓이 */
+	}
+
         @media (min-width: 600px) {
-            body {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-        }
+    		body {
+        		max-width: 600px;
+        		margin: 0 auto;
+        		padding: 10px; /* 추가 */
+    		}
+	}
