@@ -257,6 +257,7 @@ document.getElementById('toggle-help').addEventListener('click', function(event)
     if (helpCard.classList.contains('show')) {
         helpCard.classList.remove('show');
     } else {
+	helpCard.classList.remove('hidden');
         helpCard.classList.add('show');
     }
 });
